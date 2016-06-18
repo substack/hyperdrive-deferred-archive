@@ -1,6 +1,6 @@
 # hyperdrive-deferred-archive
 
-buffer API calls for a hyperdrive archive for when the instance is available
+buffer API calls for a hyperdrive archive for when an instance is available
 
 # example
 
