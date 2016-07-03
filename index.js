@@ -15,7 +15,7 @@ function Defer (archive) {
   self.metadata = {
     head: function (block, cb) {
       self._getArchive(function (archive) {
-        archive.metadata.head.call(block, cb)
+        archive.metadata.head(block, cb)
       })
     }
   }
