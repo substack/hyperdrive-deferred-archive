@@ -73,3 +73,11 @@ Defer.prototype.createFileWriteStream = function (entry) {
   })
   return d
 }
+
+Defer.prototype.checkout = function (hashOrBlock) {
+  var d = new Defer()
+  this._getArchive(function (archive) {
+    d.setArchive(archive.checkout(hashOrBlock))
+  })
+  return d
+}
