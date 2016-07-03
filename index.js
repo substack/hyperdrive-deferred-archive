@@ -9,7 +9,16 @@ module.exports = Defer
 function Defer (archive) {
   if (!(this instanceof Defer)) return new Defer(archive)
   EventEmitter.call(this)
+  this.setMaxListeners(Infinity)
   if (archive) this.setArchive(archive)
+  var self = this
+  self.metadata = {
+    head: function (block, cb) {
+      self._getArchive(function (archive) {
+        archive.metadata.head(block, cb)
+      })
+    }
+  }
 }
 
 Defer.prototype.setArchive = function (archive) {

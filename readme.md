@@ -67,6 +67,10 @@ archive.
 Any hyperdrive archive methods are buffered until a real instance is provided
 later.
 
+## archive.metadata.head()
+
+Some hypercore methods are also buffered.
+
 # install
 
 ```
