@@ -1,6 +1,6 @@
 {
   "name": "hyperdrive-deferred-archive",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "buffer API calls for a hyperdrive archive for when an instance is available",
   "main": "index.js",
   "directories": {
