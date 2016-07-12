@@ -81,3 +81,13 @@ Defer.prototype.checkout = function (hashOrBlock) {
   })
   return d
 }
+
+Defer.prototype.replicate = function (opts, cb) {
+  var d = duplexify()
+  this._getArchive(function (archive) {
+    var r = archive.replicate(opts, cb)
+    d.setReadable(r)
+    d.setWritable(r)
+  })
+  return d
+}
