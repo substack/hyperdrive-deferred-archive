@@ -50,6 +50,12 @@ Defer.prototype.download = function (index, cb) {
   })
 }
 
+Defer.prototype.lookup = function (name, cb) {
+  this._getArchive(function (archive) {
+    archive.lookup(name, cb)
+  })
+}
+
 Defer.prototype.list = function (opts, cb) {
   var d = duplexify.obj()
   this._getArchive(function (archive) {
