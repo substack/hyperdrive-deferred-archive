@@ -12,19 +12,41 @@ function Defer (archive) {
   this.setMaxListeners(Infinity)
   if (archive) this.setArchive(archive)
   var self = this
-  self.metadata = {
-    head: function (block, cb) {
-      self._getArchive(function (archive) {
-        archive.metadata.head(block, cb)
-      })
-    }
+  self.metadata = new EventEmitter
+  self.metadata.head = function (block, cb) {
+    self._getArchive(function (archive) {
+      archive.metadata.head(block, cb)
+    })
   }
 }
 
 Defer.prototype.setArchive = function (archive) {
-  this._archive = archive
-  this.key = archive.key
-  this.emit('_archive', archive)
+  var self = this
+  if (self._archive) {
+    self._archive.metadata.removeListener('download-finished',
+      self._metadata_ondownloadfinished)
+    self._archive.metadata.removeListener('open', self._metadata_onopen)
+    self._archive.metadata.removeListener('close', self._metadata_onclose)
+    self._archive.metadata.removeListener('update', self._metadata_onupdate)
+    self._archive.metadata.removeListener('have', self._metadata_onhave)
+  }
+  self._metadata_ondownloadfinished = function () {
+    self.metadata.emit('download-finished')
+  }
+  self._metadata_onopen = function () { self.metadata.emit('open') }
+  self._metadata_onclose = function () { self.metadata.emit('close') }
+  self._metadata_onupdate = function () { self.metadata.emit('update') }
+  self._metadata_onhave = function (block, data) {
+    self.metadata.emit('have', block, data)
+  }
+  archive.metadata.on('download-finished', self._metadata_ondownloadfinished)
+  archive.metadata.on('open', self._metadata_onopen)
+  archive.metadata.on('close', self._metadata_onclose)
+  archive.metadata.on('update', self._metadata_onupdate)
+  archive.metadata.on('have', self._metadata_onhave)
+  self._archive = archive
+  self.key = archive.key
+  self.emit('_archive', archive)
 }
 
 Defer.prototype._getArchive = function (fn) {
